@@ -1,3 +1,8 @@
+export type TIngredientsResponse = {
+  success: boolean;
+  data: TIngredient[];
+};
+
 export type TIngredient = {
   _id: string;
   name: string;

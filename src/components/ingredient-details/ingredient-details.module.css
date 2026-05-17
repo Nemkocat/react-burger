@@ -1,0 +1,39 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.image {
+  width: 480px;
+  height: 240px;
+  object-fit: contain;
+}
+
+.nutrients {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nutrient {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 112px;
+}
+
+.nutrient p {
+  margin: 0;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}

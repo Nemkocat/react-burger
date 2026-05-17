@@ -2,6 +2,54 @@
   display: flex;
   flex-direction: column;
   width: 600px;
+  min-width: 600px;
+  height: 100%;
   padding-bottom: 20px;
   color: var(--text-primary-color);
+}
+
+.elements {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.element {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.fillings {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0 8px 0 0;
+  overflow-y: auto;
+  list-style-type: none;
+}
+
+.fillings_list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 40px;
+}
+
+.total {
+  display: flex;
+  align-items: center;
 }

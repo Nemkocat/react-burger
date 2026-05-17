@@ -24,7 +24,7 @@ export const BurgerConstructor = ({
   );
 
   const fillings = useMemo(
-    () => ingredients.filter((ingredient) => ingredient.type !== 'bun').slice(0, 5),
+    () => ingredients.filter((ingredient) => ingredient.type !== 'bun').slice(0, 3),
     [ingredients]
   );
 

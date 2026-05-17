@@ -1,5 +1,3 @@
-import { CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
-
 import type { TIngredient } from '@utils/types';
 
 import styles from './ingredient-details.module.css';
@@ -36,10 +34,6 @@ export const IngredientDetails = ({
           </li>
         ))}
       </ul>
-      <p className={`${styles.price} text text_type_digits-default mt-10`}>
-        <span className="mr-2">{ingredient.price}</span>
-        <CurrencyIcon type="primary" />
-      </p>
     </section>
   );
 };

@@ -31,9 +31,3 @@
 .nutrient p {
   margin: 0;
 }
-
-.price {
-  display: flex;
-  align-items: center;
-  margin: 0;
-}

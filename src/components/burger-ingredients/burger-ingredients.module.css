@@ -35,8 +35,6 @@
   flex-direction: column;
   align-items: center;
   padding: 6px;
-  background: var(--background-element);
-  border-radius: var(--common-border-radius-s);
   cursor: pointer;
 }
 

@@ -2,6 +2,7 @@ import {
   Button,
   ConstructorElement,
   CurrencyIcon,
+  DragIcon,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useMemo } from 'react';
 
@@ -57,7 +58,8 @@ export const BurgerConstructor = ({
         <li className={`${styles.fillings} custom-scroll`}>
           <ul className={styles.fillings_list}>
             {fillings.map((ingredient) => (
-              <li key={ingredient._id} className={styles.element}>
+              <li key={ingredient._id} className={`${styles.element} pl-6 pr-8`}>
+                <DragIcon type="primary" />
                 <ConstructorElement
                   text={ingredient.name}
                   price={ingredient.price}

@@ -1,26 +1,27 @@
-import { Counter, CurrencyIcon, Tab } from '@krgaa/react-developer-burger-ui-components';
-import { useMemo, useRef, useState } from 'react';
+import { Tab } from '@krgaa/react-developer-burger-ui-components';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import type { TIngredient } from '@utils/types';
+import { selectIngredientCounts } from '@services/burger-constructor/constructorSelectors';
+import { useAppSelector } from '@services/hooks';
+import { ingredientsSlice } from '@services/ingredients/ingredientsSlice';
+
+import { BurgerIngredientCard } from './burger-ingredient-card';
+
+import type { TIngredient, TIngredientType } from '@utils/types';
 
 import styles from './burger-ingredients.module.css';
 
-type TBurgerIngredientsProps = {
-  ingredients: TIngredient[];
-  onIngredientClick: (ingredient: TIngredient) => void;
-};
-
 type TIngredientSection = {
   title: string;
-  type: TIngredient['type'];
+  type: TIngredientType;
   ref: React.RefObject<HTMLHeadingElement | null>;
 };
 
-export const BurgerIngredients = ({
-  ingredients,
-  onIngredientClick,
-}: TBurgerIngredientsProps): React.JSX.Element => {
-  const [currentTab, setCurrentTab] = useState('bun');
+export const BurgerIngredients = (): React.JSX.Element => {
+  const ingredients = useAppSelector(ingredientsSlice.selectors.selectIngredients);
+  const ingredientCounts = useAppSelector(selectIngredientCounts);
+  const [currentTab, setCurrentTab] = useState<TIngredientType>('bun');
+  const listRef = useRef<HTMLDivElement>(null);
   const bunsRef = useRef<HTMLHeadingElement>(null);
   const mainsRef = useRef<HTMLHeadingElement>(null);
   const saucesRef = useRef<HTMLHeadingElement>(null);
@@ -36,17 +37,59 @@ export const BurgerIngredients = ({
 
   const ingredientsByType = useMemo(
     () =>
-      sections.reduce<Record<string, TIngredient[]>>((acc, section) => {
-        acc[section.type] = ingredients.filter(
-          (ingredient) => ingredient.type === section.type
-        );
-        return acc;
-      }, {}),
+      sections.reduce<Record<TIngredientType, TIngredient[]>>(
+        (acc, section) => {
+          acc[section.type] = ingredients.filter(
+            (ingredient) => ingredient.type === section.type
+          );
+          return acc;
+        },
+        { bun: [], main: [], sauce: [] }
+      ),
     [ingredients, sections]
   );
 
+  useEffect(() => {
+    const container = listRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    const handleScroll = (): void => {
+      const containerTop = container.getBoundingClientRect().top;
+
+      let nearestSection = sections[0];
+      let minDistance = Infinity;
+
+      sections.forEach((section) => {
+        const heading = section.ref.current;
+
+        if (!heading) {
+          return;
+        }
+
+        const distance = Math.abs(heading.getBoundingClientRect().top - containerTop);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearestSection = section;
+        }
+      });
+
+      setCurrentTab(nearestSection.type);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    return (): void => {
+      container.removeEventListener('scroll', handleScroll);
+    };
+  }, [sections]);
+
   const handleTabClick = (tab: string): void => {
-    setCurrentTab(tab);
+    setCurrentTab(tab as TIngredientType);
     const section = sections.find((item) => item.type === tab);
     section?.ref.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -66,7 +109,7 @@ export const BurgerIngredients = ({
           </Tab>
         </ul>
       </nav>
-      <div className={`${styles.list} custom-scroll`}>
+      <div ref={listRef} className={`${styles.list} custom-scroll`}>
         {sections.map((section) => (
           <article key={section.type}>
             <h2
@@ -77,26 +120,12 @@ export const BurgerIngredients = ({
               {section.title}
             </h2>
             <ul className={styles.items}>
-              {ingredientsByType[section.type]?.map((ingredient) => (
-                <li
+              {ingredientsByType[section.type].map((ingredient) => (
+                <BurgerIngredientCard
                   key={ingredient._id}
-                  className={styles.item}
-                  onClick={() => onIngredientClick(ingredient)}
-                >
-                  <Counter count={0} extraClass={styles.counter} />
-                  <img
-                    className={styles.image}
-                    src={ingredient.image}
-                    alt={ingredient.name}
-                  />
-                  <div className={styles.price}>
-                    <span className="text text_type_digits-default mr-2">
-                      {ingredient.price}
-                    </span>
-                    <CurrencyIcon type="primary" />
-                  </div>
-                  <p className="text text_type_main-default mt-4">{ingredient.name}</p>
-                </li>
+                  ingredient={ingredient}
+                  count={ingredientCounts[ingredient._id] ?? 0}
+                />
               ))}
             </ul>
           </article>

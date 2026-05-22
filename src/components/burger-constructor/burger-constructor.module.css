@@ -55,3 +55,33 @@
   display: flex;
   align-items: center;
 }
+
+.placeholder {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 80px;
+  padding: 16px 24px;
+  background: var(--background-element);
+  border: 2px dashed var(--colors-interface-accent);
+  border-radius: var(--common-border-radius-s);
+}
+
+.placeholder_top {
+  border-radius: var(--top-constructor-item-border-radius);
+}
+
+.placeholder_bottom {
+  border-radius: var(--bottom-constructor-item-border-radius);
+}
+
+.placeholder_filling {
+  min-height: 80px;
+}
+
+.drop_active .placeholder,
+.drop_active {
+  box-shadow: 0 0 16px 0 rgb(51 51 255 / 40%);
+}

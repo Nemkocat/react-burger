@@ -55,3 +55,14 @@
   display: flex;
   align-items: center;
 }
+
+.placeholder {
+  background: var(--background-element);
+  border: 2px dashed var(--colors-interface-accent);
+  border-radius: var(--common-border-radius-s);
+}
+
+.drop_active .placeholder,
+.drop_active {
+  box-shadow: 0 0 16px 0 rgb(51 51 255 / 40%);
+}

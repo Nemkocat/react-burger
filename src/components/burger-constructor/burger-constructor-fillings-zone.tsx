@@ -1,4 +1,3 @@
-import { ConstructorElement } from '@krgaa/react-developer-burger-ui-components';
 import { useRef } from 'react';
 import { useDrop } from 'react-dnd';
 
@@ -10,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@services/hooks';
 import { INGREDIENT_DRAG_TYPE } from '@utils/dnd';
 
 import { BurgerConstructorFilling } from './burger-constructor-filling';
+import { BurgerConstructorPlaceholder } from './burger-constructor-placeholder';
 
 import type { TIngredient } from '@utils/types';
 
@@ -42,12 +42,7 @@ export const BurgerConstructorFillingsZone = (): React.JSX.Element => {
       <ul className={styles.fillings_list}>
         {fillings.length === 0 ? (
           <li className={styles.element}>
-            <ConstructorElement
-              text="Перетащите начинку сюда"
-              thumbnail={undefined}
-              price={0}
-              extraClass={`${styles.placeholder} text_color_inactive`}
-            />
+            <BurgerConstructorPlaceholder text="Перетащите начинку сюда" />
           </li>
         ) : (
           fillings.map((ingredient, index) => (

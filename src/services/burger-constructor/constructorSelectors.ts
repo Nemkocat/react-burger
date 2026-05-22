@@ -1,8 +1,21 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { constructorSlice } from './constructorSlice';
+import type { TConstructorIngredient } from '@utils/types';
 
-const { selectConstructorBun, selectConstructorFillings } = constructorSlice.selectors;
+type TConstructorRootState = {
+  burgerConstructor: {
+    bun: TConstructorIngredient | null;
+    ingredients: TConstructorIngredient[];
+  };
+};
+
+const selectConstructorBun = (
+  state: TConstructorRootState
+): TConstructorIngredient | null => state.burgerConstructor.bun;
+
+const selectConstructorFillings = (
+  state: TConstructorRootState
+): TConstructorIngredient[] => state.burgerConstructor.ingredients;
 
 export const selectIngredientCounts = createSelector(
   [selectConstructorBun, selectConstructorFillings],

@@ -9,6 +9,8 @@ import {
 import { useAppDispatch, useAppSelector } from '@services/hooks';
 import { INGREDIENT_DRAG_TYPE } from '@utils/dnd';
 
+import { BurgerConstructorPlaceholder } from './burger-constructor-placeholder';
+
 import type { TIngredient } from '@utils/types';
 
 import styles from './burger-constructor.module.css';
@@ -55,12 +57,9 @@ export const BurgerConstructorBunSlot = ({
           thumbnail={bun.image}
         />
       ) : (
-        <ConstructorElement
-          type={position}
+        <BurgerConstructorPlaceholder
           text={`Перетащите булку сюда (${positionLabel})`}
-          thumbnail={undefined}
-          price={0}
-          extraClass={`${styles.placeholder} text_color_inactive`}
+          position={position}
         />
       )}
     </li>

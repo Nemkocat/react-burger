@@ -23,6 +23,9 @@ type TModalType = 'ingredient' | 'order' | null;
 export const App = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(ingredientsSlice.selectors.selectIngredientsLoading);
+  const ingredientsError = useAppSelector(
+    ingredientsSlice.selectors.selectIngredientsError
+  );
   const selectedIngredient = useAppSelector(
     ingredientModalSlice.selectors.selectSelectedIngredient
   );
@@ -50,6 +53,16 @@ export const App = (): React.JSX.Element => {
 
   if (isLoading) {
     return <Preloader />;
+  }
+
+  if (ingredientsError) {
+    return (
+      <div className={styles.app}>
+        <p className="text text_type_main-large p-5">
+          Не удалось загрузить ингредиенты: {ingredientsError}
+        </p>
+      </div>
+    );
   }
 
   return (

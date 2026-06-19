@@ -1,9 +1,9 @@
 import { Counter, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
 import { useRef } from 'react';
 import { useDrag } from 'react-dnd';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useAppDispatch } from '@services/hooks';
-import { setSelectedIngredient } from '@services/ingredient-modal/ingredientModalSlice';
+import { INGREDIENT_MODAL_FLAG } from '@utils/constants';
 import { INGREDIENT_DRAG_TYPE } from '@utils/dnd';
 
 import type { TIngredient } from '@utils/types';
@@ -19,7 +19,8 @@ export const BurgerIngredientCard = ({
   ingredient,
   count,
 }: TBurgerIngredientCardProps): React.JSX.Element => {
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const ref = useRef<HTMLLIElement>(null);
 
   const [{ isDragging }, drag] = useDrag({
@@ -33,7 +34,10 @@ export const BurgerIngredientCard = ({
   drag(ref);
 
   const handleClick = (): void => {
-    dispatch(setSelectedIngredient(ingredient));
+    sessionStorage.setItem(INGREDIENT_MODAL_FLAG, 'true');
+    void navigate(`/ingredients/${ingredient._id}`, {
+      state: { background: location },
+    });
   };
 
   return (

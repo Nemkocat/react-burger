@@ -1,4 +1,5 @@
 import { Button, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
+import { useNavigate } from 'react-router-dom';
 
 import { selectTotalPrice } from '@services/burger-constructor/constructorSelectors';
 import {
@@ -8,6 +9,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@services/hooks';
 import { orderSlice } from '@services/order/orderSlice';
 import { createOrder } from '@services/order/orderThunk';
+import { userSlice } from '@services/user/userSlice';
 
 import { BurgerConstructorBunSlot } from './burger-constructor-bun-slot';
 import { BurgerConstructorFillingsZone } from './burger-constructor-fillings-zone';
@@ -22,11 +24,18 @@ export const BurgerConstructor = ({
   onOrderSuccess,
 }: TBurgerConstructorProps): React.JSX.Element => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const bun = useAppSelector(constructorSlice.selectors.selectConstructorBun);
   const totalPrice = useAppSelector(selectTotalPrice);
   const isOrderLoading = useAppSelector(orderSlice.selectors.selectOrderLoading);
+  const isAuthenticated = useAppSelector(userSlice.selectors.selectIsAuthenticated);
 
   const handleOrderClick = (): void => {
+    if (!isAuthenticated) {
+      void navigate('/login', { state: { from: { pathname: '/' } } });
+      return;
+    }
+
     void dispatch(createOrder())
       .unwrap()
       .then(() => {

@@ -1,0 +1,54 @@
+.profile {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  width: 1240px;
+  margin: 120px auto 0;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  min-width: 320px;
+}
+
+.link {
+  display: block;
+  color: var(--text-inactive-color);
+  text-decoration: none;
+}
+
+.link_active {
+  color: var(--text-primary-color);
+}
+
+.logout {
+  padding: 0;
+  color: var(--text-inactive-color);
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hint {
+  max-width: 320px;
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 480px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+.error {
+  color: var(--colors-interface-error);
+}

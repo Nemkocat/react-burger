@@ -29,7 +29,7 @@ export const ResetPasswordPage = (): React.JSX.Element => {
     void resetPassword({ password, token })
       .then(() => {
         localStorage.removeItem(RESET_PASSWORD_FLAG);
-        navigate('/login', { replace: true });
+        void navigate('/login', { replace: true });
       })
       .catch((err: unknown) => {
         const message = err instanceof Error ? err.message : 'Ошибка сброса пароля';

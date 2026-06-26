@@ -27,7 +27,7 @@ export const LoginPage = (): React.JSX.Element => {
     void dispatch(loginUser({ email, password }))
       .unwrap()
       .then(() => {
-        navigate(from, { replace: true });
+        void navigate(from, { replace: true });
       })
       .catch(() => undefined);
   };

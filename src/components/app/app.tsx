@@ -2,7 +2,14 @@ import { GuestRoute } from '@hocs/guest-route/guest-route';
 import { ProtectedRoute } from '@hocs/protected-route/protected-route';
 import { Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useCallback, useEffect } from 'react';
-import { Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams,
+  type Location,
+} from 'react-router-dom';
 
 import { AppHeader } from '@components/app-header/app-header';
 import { IngredientDetails } from '@components/ingredient-details/ingredient-details';
@@ -38,9 +45,9 @@ const IngredientModal = (): React.JSX.Element | null => {
     const background = (location.state as { background?: Location })?.background;
 
     if (background) {
-      navigate(background.pathname + background.search, { replace: true });
+      void navigate(background.pathname + background.search, { replace: true });
     } else {
-      navigate('/', { replace: true });
+      void navigate('/', { replace: true });
     }
   }, [location.state, navigate]);
 

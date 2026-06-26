@@ -21,7 +21,7 @@ export const ForgotPasswordPage = (): React.JSX.Element => {
     void forgotPassword(email)
       .then(() => {
         localStorage.setItem(RESET_PASSWORD_FLAG, 'true');
-        navigate('/reset-password', { replace: true });
+        void navigate('/reset-password', { replace: true });
       })
       .catch((err: unknown) => {
         const message =

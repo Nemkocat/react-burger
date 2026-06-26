@@ -24,7 +24,7 @@ export const RegisterPage = (): React.JSX.Element => {
     void dispatch(registerUser({ email, password, name }))
       .unwrap()
       .then(() => {
-        navigate('/', { replace: true });
+        void navigate('/', { replace: true });
       })
       .catch(() => undefined);
   };

@@ -11,27 +11,29 @@ import { clearTokens, getRefreshToken } from '@utils/token';
 
 import type { TAuthResponse, TUser } from '@utils/types';
 
-export const checkUserAuth = createAsyncThunk<TUser | null>(
-  'user/checkAuth',
-  async (_, { rejectWithValue }) => {
-    if (!getRefreshToken()) {
-      return null;
-    }
-
-    try {
-      return await getUser();
-    } catch (error) {
-      clearTokens();
-      const message =
-        error instanceof Error ? error.message : 'Ошибка проверки авторизации';
-      return rejectWithValue(message);
-    }
+export const checkUserAuth = createAsyncThunk<
+  TUser | null,
+  void,
+  { rejectValue: string }
+>('user/checkAuth', async (_, { rejectWithValue }) => {
+  if (!getRefreshToken()) {
+    return null;
   }
-);
+
+  try {
+    return await getUser();
+  } catch (error) {
+    clearTokens();
+    const message =
+      error instanceof Error ? error.message : 'Ошибка проверки авторизации';
+    return rejectWithValue(message);
+  }
+});
 
 export const registerUser = createAsyncThunk<
   TAuthResponse,
-  { email: string; password: string; name: string }
+  { email: string; password: string; name: string },
+  { rejectValue: string }
 >('user/register', async (payload, { rejectWithValue }) => {
   try {
     return await registerUserApi(payload);
@@ -43,7 +45,8 @@ export const registerUser = createAsyncThunk<
 
 export const loginUser = createAsyncThunk<
   TAuthResponse,
-  { email: string; password: string }
+  { email: string; password: string },
+  { rejectValue: string }
 >('user/login', async (payload, { rejectWithValue }) => {
   try {
     return await loginUserApi(payload);
@@ -53,7 +56,7 @@ export const loginUser = createAsyncThunk<
   }
 });
 
-export const logoutUser = createAsyncThunk(
+export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
   'user/logout',
   async (_, { rejectWithValue }) => {
     try {
@@ -68,7 +71,8 @@ export const logoutUser = createAsyncThunk(
 
 export const updateUserProfile = createAsyncThunk<
   TUser,
-  { name: string; email: string; password: string }
+  { name: string; email: string; password: string },
+  { rejectValue: string }
 >('user/updateProfile', async (payload, { rejectWithValue }) => {
   try {
     return await updateUser(payload);

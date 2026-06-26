@@ -13,7 +13,7 @@ export const ProfilePage = (): React.JSX.Element => {
     void dispatch(logoutUser())
       .unwrap()
       .then(() => {
-        navigate('/login', { replace: true });
+        void navigate('/login', { replace: true });
       })
       .catch(() => undefined);
   };

@@ -1,0 +1,32 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 480px;
+  margin: 180px auto 0;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  color: var(--colors-interface-accent);
+}
+
+.links a {
+  color: var(--colors-interface-accent);
+  text-decoration: none;
+}
+
+.links_center {
+  justify-content: center;
+}
+
+.links_column {
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.error {
+  color: var(--colors-interface-error);
+  text-align: center;
+}

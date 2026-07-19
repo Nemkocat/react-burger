@@ -38,6 +38,7 @@ export const BurgerConstructorFillingsZone = (): React.JSX.Element => {
     <li
       ref={ref}
       className={`${styles.fillings} custom-scroll ${isOver ? styles.drop_active : ''}`}
+      data-testid="constructor-fillings"
     >
       <ul className={styles.fillings_list}>
         {fillings.length === 0 ? (

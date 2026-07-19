@@ -46,6 +46,9 @@ export const BurgerIngredientCard = ({
       className={styles.item}
       style={{ opacity: isDragging ? 0.5 : 1 }}
       onClick={handleClick}
+      data-testid="ingredient-card"
+      data-ingredient-id={ingredient._id}
+      data-ingredient-type={ingredient.type}
     >
       {count > 0 && <Counter count={count} extraClass={styles.counter} />}
       <img className={styles.image} src={ingredient.image} alt={ingredient.name} />

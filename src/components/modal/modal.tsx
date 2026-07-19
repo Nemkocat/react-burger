@@ -42,10 +42,18 @@ export const Modal = ({
   return createPortal(
     <>
       <ModalOverlay onClick={onClose} />
-      <div className={styles.modal}>
+      <div className={styles.modal} data-testid="modal">
         <header className={styles.header}>
           {title ? <h3 className={titleClassName}>{title}</h3> : <span />}
-          <CloseIcon type="primary" onClick={onClose} />
+          <button
+            type="button"
+            className={styles.close}
+            data-testid="modal-close"
+            onClick={onClose}
+            aria-label="Закрыть"
+          >
+            <CloseIcon type="primary" />
+          </button>
         </header>
         {children}
       </div>

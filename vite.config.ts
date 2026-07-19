@@ -6,7 +6,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     checker({
       typescript: true,
@@ -19,13 +19,14 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  base: '',
+  base: mode === 'production' ? '/react-burger/' : '/',
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./vitest-setup.ts'],
+    exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**'],
   },
   server: {
     open: true,
   },
-});
+}));

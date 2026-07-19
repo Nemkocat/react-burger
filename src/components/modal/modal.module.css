@@ -31,3 +31,12 @@
 .header h3 {
   margin: 0;
 }
+
+.close {
+  display: flex;
+  padding: 0;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}

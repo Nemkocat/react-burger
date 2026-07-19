@@ -2,6 +2,11 @@ body {
   margin: 0;
 }
 
+#modals {
+  position: relative;
+  z-index: 9990;
+}
+
 /* Fix for scrollbar */
 
 @supports (scrollbar-color: auto) {

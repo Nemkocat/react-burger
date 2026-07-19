@@ -27,6 +27,7 @@ describe('profileOrdersSlice', () => {
       totalToday: 0,
       isConnected: false,
       isConnecting: false,
+      isLoaded: false,
       error: null,
       currentOrder: null,
       currentOrderLoading: false,

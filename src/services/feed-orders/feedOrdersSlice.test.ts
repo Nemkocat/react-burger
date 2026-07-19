@@ -24,6 +24,7 @@ describe('feedOrdersSlice', () => {
       totalToday: 0,
       isConnected: false,
       isConnecting: false,
+      isLoaded: false,
       error: null,
     });
   });

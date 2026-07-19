@@ -46,7 +46,7 @@ export const BurgerConstructor = ({
   };
 
   return (
-    <section className={styles.burger_constructor}>
+    <section className={styles.burger_constructor} data-testid="burger-constructor">
       <ul className={styles.elements}>
         <BurgerConstructorBunSlot position="top" />
         <BurgerConstructorFillingsZone />

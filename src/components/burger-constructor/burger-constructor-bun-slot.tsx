@@ -47,6 +47,7 @@ export const BurgerConstructorBunSlot = ({
     <li
       ref={ref}
       className={`${styles.element} ${paddingClass} ${isOver ? styles.drop_active : ''}`}
+      data-testid={`constructor-bun-${position}`}
     >
       {bun ? (
         <ConstructorElement

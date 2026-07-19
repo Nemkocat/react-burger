@@ -79,4 +79,10 @@ export type TOrdersResponse = {
   totalToday: number;
 };
 
+export type TOrderResponseById = {
+  success: boolean;
+  order: TOrder;
+  orders?: TOrder[];
+};
+
 export type TOrdersSocketMessage = TOrdersResponse | TMessageResponse;

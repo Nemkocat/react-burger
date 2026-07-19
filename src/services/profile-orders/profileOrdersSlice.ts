@@ -12,6 +12,7 @@ type TProfileOrdersState = {
   totalToday: number;
   isConnected: boolean;
   isConnecting: boolean;
+  isLoaded: boolean;
   error: string | null;
   currentOrder: TOrder | null;
   currentOrderLoading: boolean;
@@ -24,6 +25,7 @@ const initialState: TProfileOrdersState = {
   totalToday: 0,
   isConnected: false,
   isConnecting: false,
+  isLoaded: false,
   error: null,
   currentOrder: null,
   currentOrderLoading: false,
@@ -59,11 +61,16 @@ export const profileOrdersSlice = createSlice({
   reducers: {
     profileOrdersConnect: (state, _action: PayloadAction<string>) => {
       state.isConnecting = true;
+      state.isLoaded = false;
       state.error = null;
     },
     profileOrdersDisconnect: (state) => {
       state.isConnected = false;
       state.isConnecting = false;
+      state.isLoaded = false;
+      state.orders = [];
+      state.total = 0;
+      state.totalToday = 0;
     },
     profileOrdersConnecting: (state) => {
       state.isConnecting = true;
@@ -81,16 +88,19 @@ export const profileOrdersSlice = createSlice({
     profileOrdersError: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
       state.isConnecting = false;
+      state.isLoaded = true;
     },
     profileOrdersInvalidToken: (state) => {
       state.error = 'Invalid or missing token';
       state.isConnecting = false;
+      state.isLoaded = true;
     },
     profileOrdersMessage: (state, action: PayloadAction<TOrdersSocketMessage>) => {
       const payload = action.payload;
 
       if (!('orders' in payload) || !payload.success) {
         state.error = 'message' in payload ? payload.message : 'Ошибка истории заказов';
+        state.isLoaded = true;
         return;
       }
 
@@ -98,6 +108,7 @@ export const profileOrdersSlice = createSlice({
       state.total = payload.total;
       state.totalToday = payload.totalToday;
       state.error = null;
+      state.isLoaded = true;
     },
     clearCurrentOrder: (state) => {
       state.currentOrder = null;
@@ -109,6 +120,7 @@ export const profileOrdersSlice = createSlice({
     selectProfileOrders: (state) => state.orders,
     selectProfileOrdersConnected: (state) => state.isConnected,
     selectProfileOrdersConnecting: (state) => state.isConnecting,
+    selectProfileOrdersLoaded: (state) => state.isLoaded,
     selectProfileOrdersError: (state) => state.error,
     selectCurrentOrder: (state) => state.currentOrder,
     selectCurrentOrderLoading: (state) => state.currentOrderLoading,

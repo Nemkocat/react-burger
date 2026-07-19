@@ -8,6 +8,7 @@ import type {
   TMessageResponse,
   TOrder,
   TOrderResponse,
+  TOrderResponseById,
   TOrdersResponse,
   TTokenResponse,
   TUser,
@@ -226,13 +227,21 @@ export const resetPassword = (payload: {
 
 export const getOrderByNumber = (number: number | string): Promise<TOrder> =>
   fetch(`${BASE_URL}/orders/${number}`)
-    .then((response) => checkResponse<TOrdersResponse>(response))
+    .then((response) => checkResponse<TOrderResponseById | TOrdersResponse>(response))
     .then((data) => {
-      if (!data.success || !data.orders?.length) {
+      if (!data.success) {
         return Promise.reject(new Error('Не удалось загрузить заказ'));
       }
 
-      return data.orders[0];
+      if ('order' in data && data.order) {
+        return data.order;
+      }
+
+      if ('orders' in data && data.orders?.length) {
+        return data.orders[0];
+      }
+
+      return Promise.reject(new Error('Не удалось загрузить заказ'));
     })
     .catch((error: unknown) => {
       const message = error instanceof Error ? error.message : 'Неизвестная ошибка';

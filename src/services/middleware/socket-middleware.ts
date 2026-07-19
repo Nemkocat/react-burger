@@ -50,15 +50,11 @@ export const createSocketMiddleware = <TMessage>(
       }
     };
 
-    const detachSocketHandlers = (): void => {
-      if (!socket) {
-        return;
-      }
-
-      socket.onopen = null;
-      socket.onclose = null;
-      socket.onerror = null;
-      socket.onmessage = null;
+    const detachSocketHandlers = (target: WebSocket): void => {
+      target.onopen = null;
+      target.onclose = null;
+      target.onerror = null;
+      target.onmessage = null;
     };
 
     const closeSocket = (stopReconnect = true): void => {
@@ -68,10 +64,33 @@ export const createSocketMiddleware = <TMessage>(
         shouldReconnect = false;
       }
 
-      if (socket) {
-        detachSocketHandlers();
-        socket.close();
-        socket = null;
+      if (!socket) {
+        return;
+      }
+
+      const closingSocket = socket;
+      detachSocketHandlers(closingSocket);
+      socket = null;
+
+      // Не закрываем CONNECTING сразу — иначе в консоли:
+      // "WebSocket is closed before the connection is established"
+      // (React StrictMode монтирует/размонтирует эффект дважды).
+      if (closingSocket.readyState === WebSocket.CONNECTING) {
+        closingSocket.addEventListener(
+          'open',
+          () => {
+            closingSocket.close();
+          },
+          { once: true }
+        );
+        return;
+      }
+
+      if (
+        closingSocket.readyState === WebSocket.OPEN ||
+        closingSocket.readyState === WebSocket.CLOSING
+      ) {
+        closingSocket.close();
       }
     };
 

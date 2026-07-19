@@ -86,7 +86,8 @@ export const OrderInfo = ({
   useEffect(() => {
     // На отдельной странице сокет родительского списка не открыт — подключаемся сами.
     // В модалке список уже держит соединение, повторно закрывать его нельзя.
-    if (order || isModal) {
+    // Не зависим от `order`: иначе после получения заказа сработает cleanup и оборвёт сокет.
+    if (isModal) {
       return;
     }
 
@@ -105,7 +106,7 @@ export const OrderInfo = ({
         dispatch(profileOrdersDisconnect());
       };
     }
-  }, [dispatch, order, isModal, isFeedRoute, isProfileRoute]);
+  }, [dispatch, isModal, isFeedRoute, isProfileRoute]);
 
   useEffect(() => {
     if (order) {

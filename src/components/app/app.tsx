@@ -14,12 +14,14 @@ import {
 import { AppHeader } from '@components/app-header/app-header';
 import { IngredientDetails } from '@components/ingredient-details/ingredient-details';
 import { Modal } from '@components/modal/modal';
+import { OrderInfo } from '@components/order-info/order-info';
 import { FeedPage } from '@pages/feed/feed-page';
 import { ForgotPasswordPage } from '@pages/forgot-password/forgot-password-page';
 import { Home } from '@pages/home/home';
 import { IngredientPage } from '@pages/ingredient-page/ingredient-page';
 import { LoginPage } from '@pages/login/login-page';
 import { NotFoundPage } from '@pages/not-found/not-found-page';
+import { OrderInfoPage } from '@pages/order-info/order-info-page';
 import { ProfileOrdersPage } from '@pages/profile-orders/profile-orders-page';
 import { ProfileForm } from '@pages/profile/profile-form';
 import { ProfilePage } from '@pages/profile/profile-page';
@@ -29,7 +31,7 @@ import { useAppDispatch, useAppSelector } from '@services/hooks';
 import { ingredientsSlice } from '@services/ingredients/ingredientsSlice';
 import { fetchIngredients } from '@services/ingredients/ingredientsThunk';
 import { checkUserAuth } from '@services/user/userThunk';
-import { INGREDIENT_MODAL_FLAG } from '@utils/constants';
+import { INGREDIENT_MODAL_FLAG, ORDER_MODAL_FLAG } from '@utils/constants';
 
 import styles from './app.module.css';
 
@@ -62,6 +64,33 @@ const IngredientModal = (): React.JSX.Element | null => {
   );
 };
 
+const OrderModal = ({ fallbackPath }: { fallbackPath: string }): React.JSX.Element => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleClose = useCallback((): void => {
+    sessionStorage.removeItem(ORDER_MODAL_FLAG);
+    const background = (location.state as { background?: Location })?.background;
+
+    if (background) {
+      void navigate(background.pathname + background.search, { replace: true });
+    } else {
+      void navigate(fallbackPath, { replace: true });
+    }
+  }, [fallbackPath, location.state, navigate]);
+
+  return (
+    <Modal
+      title={id ? `#${id}` : ''}
+      titleClassName="text text_type_digits-default"
+      onClose={handleClose}
+    >
+      {id ? <OrderInfo orderNumber={id} isModal /> : null}
+    </Modal>
+  );
+};
+
 export const App = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -72,9 +101,28 @@ export const App = (): React.JSX.Element => {
     (Boolean(stateBackground) ||
       sessionStorage.getItem(INGREDIENT_MODAL_FLAG) === 'true');
 
+  const isModalFeedOrderRoute =
+    /^\/feed\/\d+\/?$/.test(location.pathname) &&
+    (Boolean(stateBackground) || sessionStorage.getItem(ORDER_MODAL_FLAG) === 'true');
+
+  const isModalProfileOrderRoute =
+    /^\/profile\/orders\/\d+\/?$/.test(location.pathname) &&
+    (Boolean(stateBackground) || sessionStorage.getItem(ORDER_MODAL_FLAG) === 'true');
+
+  const isModalOrderRoute = isModalFeedOrderRoute || isModalProfileOrderRoute;
+
   const pageLocation: Location = isModalIngredientRoute
     ? (stateBackground ?? { ...location, pathname: '/', search: '', hash: '' })
-    : location;
+    : isModalFeedOrderRoute
+      ? (stateBackground ?? { ...location, pathname: '/feed', search: '', hash: '' })
+      : isModalProfileOrderRoute
+        ? (stateBackground ?? {
+            ...location,
+            pathname: '/profile/orders',
+            search: '',
+            hash: '',
+          })
+        : location;
 
   const isLoading = useAppSelector(ingredientsSlice.selectors.selectIngredientsLoading);
   const ingredientsError = useAppSelector(
@@ -106,6 +154,7 @@ export const App = (): React.JSX.Element => {
       <Routes location={pageLocation}>
         <Route path="/" element={<Home />} />
         <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed/:id" element={<OrderInfoPage />} />
         <Route
           path="/login"
           element={
@@ -149,12 +198,33 @@ export const App = (): React.JSX.Element => {
           <Route index element={<ProfileForm />} />
           <Route path="orders" element={<ProfileOrdersPage />} />
         </Route>
+        <Route
+          path="/profile/orders/:id"
+          element={
+            <ProtectedRoute>
+              <OrderInfoPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/ingredients/:id" element={<IngredientPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {isModalIngredientRoute && (
         <Routes>
           <Route path="/ingredients/:id" element={<IngredientModal />} />
+        </Routes>
+      )}
+      {isModalOrderRoute && (
+        <Routes>
+          <Route path="/feed/:id" element={<OrderModal fallbackPath="/feed" />} />
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <ProtectedRoute>
+                <OrderModal fallbackPath="/profile/orders" />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       )}
     </div>

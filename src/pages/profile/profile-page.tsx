@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '@services/hooks';
 import { logoutUser } from '@services/user/userThunk';
@@ -8,6 +8,8 @@ import styles from './profile-page.module.css';
 export const ProfilePage = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isOrdersPage = location.pathname.startsWith('/profile/orders');
 
   const handleLogout = (): void => {
     void dispatch(logoutUser())
@@ -46,7 +48,9 @@ export const ProfilePage = (): React.JSX.Element => {
           Выход
         </button>
         <p className={`${styles.hint} text text_type_main-default text_color_inactive`}>
-          В этом разделе вы можете изменить свои персональные данные
+          {isOrdersPage
+            ? 'В этом разделе вы можете просмотреть свою историю заказов'
+            : 'В этом разделе вы можете изменить свои персональные данные'}
         </p>
       </nav>
       <Outlet />

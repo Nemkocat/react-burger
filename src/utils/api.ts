@@ -6,7 +6,9 @@ import type {
   TIngredient,
   TIngredientsResponse,
   TMessageResponse,
+  TOrder,
   TOrderResponse,
+  TOrdersResponse,
   TTokenResponse,
   TUser,
   TUserResponse,
@@ -221,3 +223,20 @@ export const resetPassword = (payload: {
 
     return data;
   });
+
+export const getOrderByNumber = (number: number | string): Promise<TOrder> =>
+  fetch(`${BASE_URL}/orders/${number}`)
+    .then((response) => checkResponse<TOrdersResponse>(response))
+    .then((data) => {
+      if (!data.success || !data.orders?.length) {
+        return Promise.reject(new Error('Не удалось загрузить заказ'));
+      }
+
+      return data.orders[0];
+    })
+    .catch((error: unknown) => {
+      const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+      return Promise.reject(new Error(message));
+    });
+
+export { refreshTokenRequest };

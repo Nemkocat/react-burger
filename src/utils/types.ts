@@ -59,3 +59,24 @@ export type TTokenResponse = {
   accessToken: string;
   refreshToken: string;
 };
+
+export type TOrderStatus = 'created' | 'pending' | 'done';
+
+export type TOrder = {
+  _id: string;
+  ingredients: string[];
+  status: TOrderStatus;
+  name: string;
+  number: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TOrdersResponse = {
+  success: boolean;
+  orders: TOrder[];
+  total: number;
+  totalToday: number;
+};
+
+export type TOrdersSocketMessage = TOrdersResponse | TMessageResponse;

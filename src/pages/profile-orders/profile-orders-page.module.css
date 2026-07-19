@@ -1,0 +1,15 @@
+.section {
+  width: 844px;
+  max-height: calc(100vh - 160px);
+  padding-right: 8px;
+  overflow-y: auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

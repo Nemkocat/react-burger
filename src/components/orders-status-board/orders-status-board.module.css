@@ -1,0 +1,38 @@
+.board {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.statuses {
+  display: flex;
+  gap: 36px;
+}
+
+.statusBlock {
+  flex: 1;
+  min-width: 0;
+}
+
+.columns {
+  display: flex;
+  gap: 36px;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.doneNumber {
+  color: #0cc;
+}
+
+.total {
+  margin: 0;
+  text-shadow:
+    0 0 16px rgb(51 51 255 / 25%),
+    0 0 8px rgb(51 51 255 / 25%),
+    0 4px 32px rgb(51 51 255 / 50%);
+}

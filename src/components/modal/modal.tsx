@@ -9,13 +9,15 @@ import styles from './modal.module.css';
 const modalRoot = document.getElementById('modals');
 
 type TModalProps = {
-  title: string;
+  title: React.ReactNode;
+  titleClassName?: string;
   onClose: () => void;
   children: React.ReactNode;
 };
 
 export const Modal = ({
   title,
+  titleClassName = 'text text_type_main-large',
   onClose,
   children,
 }: TModalProps): React.JSX.Element | null => {
@@ -42,7 +44,7 @@ export const Modal = ({
       <ModalOverlay onClick={onClose} />
       <div className={styles.modal}>
         <header className={styles.header}>
-          {title ? <h3 className="text text_type_main-large">{title}</h3> : <span />}
+          {title ? <h3 className={titleClassName}>{title}</h3> : <span />}
           <CloseIcon type="primary" onClick={onClose} />
         </header>
         {children}
